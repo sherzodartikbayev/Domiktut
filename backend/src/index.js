@@ -3,17 +3,33 @@ require('dotenv').config()
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const path = require('path')
-const adminMiddleware = require('./middlewares/admin.middleware')
+const session = require('express-session')
+const errorMiddleware = require('./middlewares/error.middleware')
+const cors = require('cors')
 
 const app = express()
 
 // Middlewares
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(
+	session({
+		secret: process.env.SECRET_KEY,
+		saveUninitialized: false,
+		resave: false,
+		cookie: {
+			secure: false,
+			httpOnly: true,
+			sameSite: 'lax',
+			maxAge: 24 * 60 * 60 * 1000,
+		},
+	}),
+)
 
-// Routes
-app.use('/admin', require('./routes/admin.route'))
-app.use('/auth', require('./routes/auth.route'))
+// Route
+app.use('/api', require('./routes/index.route'))
+
+app.use(errorMiddleware)
 
 const PORT = process.env.PORT
 
