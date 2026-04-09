@@ -30,36 +30,16 @@ class AdminController {
 
 	async addCottage(req, res) {
 		try {
-			const {
-				title,
-				address,
-				media,
-				features,
-				capacity,
-				schedule,
-				details,
-				prices,
-				location,
-			} = req.body
+			const data = req.body
 
-			if (!title || !address || !location?.coordinates) {
+			if (!data.title || !data.address || !data.location?.coordinates) {
 				return res.status(400).json({
 					message:
 						'Missing required fields: title, address, and coordinates are mandatory.',
 				})
 			}
 
-			const newCottage = await cottageModel.create({
-				title,
-				address,
-				media,
-				features,
-				capacity,
-				schedule,
-				details,
-				prices,
-				location,
-			})
+			const newCottage = await cottageModel.create(data)
 
 			return res.status(201).json(newCottage)
 		} catch (error) {
@@ -75,41 +55,19 @@ class AdminController {
 
 	async editCottage(req, res) {
 		try {
-			const {
-				title,
-				address,
-				media,
-				features,
-				capacity,
-				schedule,
-				details,
-				prices,
-				location,
-			} = req.body
+			const data = req.body
 			const { id } = req.params
 
-			if (!title || !address || !location?.coordinates) {
+			if (!data.title || !data.address || !data.location?.coordinates) {
 				return res.status(400).json({
 					message:
 						'Missing required fields: title, address, and coordinates are mandatory.',
 				})
 			}
 
-			const cottage = await cottageModel.findByIdAndUpdate(
-				id,
-				{
-					title,
-					address,
-					media,
-					features,
-					capacity,
-					schedule,
-					details,
-					prices,
-					location,
-				},
-				{ new: true, runValidators: true },
-			)
+			const cottage = await cottageModel.findByIdAndUpdate(id, data, {
+				new: true,
+			})
 
 			if (!cottage) {
 				return res.status(404).json({ message: 'Cottage not found!' })
