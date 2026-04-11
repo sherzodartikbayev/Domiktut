@@ -7,6 +7,7 @@ import { Field, FieldError, FieldGroup } from '../ui/field'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
+import { PatternFormat } from 'react-number-format'
 
 export function ApplicationSelectionForm() {
 	const form = useForm<z.infer<typeof applicationSelectionFormSchema>>({
@@ -15,9 +16,7 @@ export function ApplicationSelectionForm() {
 			from: new Date(),
 			to: new Date(),
 			name: '',
-			phoneNumber: '+',
-			numberOfPeople: '1',
-			criteriaOfCottage: '',
+			numberOfPeople: 1,
 			budget: 1000,
 		},
 	})
@@ -118,13 +117,18 @@ export function ApplicationSelectionForm() {
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<Label htmlFor={field.name}>Ваш телефон</Label>
-							<Input
-								{...field}
-								id={field.name}
-								placeholder='+8 843 528-65-48'
+							<Label htmlFor='phone'>Ваш телефон</Label>
+							<PatternFormat
+								{...field} // This passes value, onChange, onBlur automatically
+								id='phone'
+								format='+7 (###) ###-##-##'
+								allowEmptyFormatting
+								mask='_'
+								customInput={Input}
+								onValueChange={values => {
+									field.onChange(values.formattedValue)
+								}}
 							/>
-
 							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 						</Field>
 					)}
@@ -142,6 +146,8 @@ export function ApplicationSelectionForm() {
 								{...field}
 								id='numberOfPeople'
 								placeholder='Количество человек'
+								type='number'
+								onChange={e => field.onChange(e.target.valueAsNumber)}
 								min={1}
 							/>
 
@@ -149,7 +155,6 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
-
 				{/* Criteria Of Cottage */}
 				<Controller
 					name='criteriaOfCottage'
@@ -168,20 +173,19 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
-
 				{/* Budget */}
 				<Controller
 					name='budget'
 					control={form.control}
 					render={({ field, fieldState }) => (
 						<Field data-invalid={fieldState.invalid}>
-							<Label htmlFor='budget'>Допустимый бюджет</Label>
-
+							<Label htmlFor={field.name}>Допустимый бюджет</Label>
 							<Input
 								{...field}
-								id='budget'
+								id={field.name}
 								placeholder='Сумма в рублях, 2000'
 								type='number'
+								onChange={e => field.onChange(e.target.valueAsNumber)}
 								min={1000}
 							/>
 
@@ -189,7 +193,6 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
-
 				<Button
 					type='submit'
 					className='bg-[#F4683F] text-white rounded-2xl py-6 font-semibold text-[18px]'
