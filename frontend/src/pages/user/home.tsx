@@ -1,3 +1,4 @@
+import { ApplicationSelectionForm } from '../../components/forms/applicationSelection.form'
 import { Card, CardContent } from '../../components/ui/card'
 import {
 	Carousel,
@@ -59,10 +60,14 @@ const HomePage = () => {
 				</div>
 
 				<div className=''>
-					<div className='w-90 h-124.25 rounded-[20px] bg-white py-10 px-10'>
-						<h3 className='text-xl font-semibold text-center'>
+					<div className='w-100 rounded-[20px] bg-white py-10 px-10'>
+						<h3 className='text-xl font-semibold text-center mb-5'>
 							Заявка на подбор
 						</h3>
+
+						<div>
+							<ApplicationSelectionForm />
+						</div>
 					</div>
 				</div>
 			</div>
