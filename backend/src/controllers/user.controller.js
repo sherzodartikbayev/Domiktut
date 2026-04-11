@@ -1,3 +1,4 @@
+const applicationModel = require('../models/application.model')
 const cottageModel = require('../models/cottage.model')
 const userModel = require('../models/user.model')
 const bcrypt = require('bcrypt')
@@ -130,6 +131,32 @@ class UserContoller {
 			return res.json({ success: 'Cottage removed from favorites' })
 		} catch (error) {
 			return res.status(500).json({ message: 'Error deleting favorite.' })
+		}
+	}
+
+	// [POST] /user/send-application
+	async sendApplication(req, res) {
+		try {
+			const data = req.body
+
+			if (
+				!data.from |
+				!data.to |
+				!data.name |
+				!data.phoneNumber |
+				!data.numberOfPeople |
+				!data.criteriaOfCottage |
+				!data.budget
+			) {
+				return res.status(401).json({ message: 'All fields are required' })
+			}
+
+			const application = await applicationModel.create(data)
+
+			return res.status(201).json(application)
+		} catch (error) {
+			console.log(error)
+			return res.status(500).json({ message: 'Error sending application.' })
 		}
 	}
 }

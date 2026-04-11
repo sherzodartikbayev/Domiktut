@@ -1,3 +1,4 @@
+const applicationModel = require('../models/application.model')
 const cottageModel = require('../models/cottage.model')
 
 class AdminController {
@@ -104,6 +105,38 @@ class AdminController {
 		} catch (error) {
 			console.log(error)
 			return res.status(500).json({ message: 'Server Error', error })
+		}
+	}
+
+	async getApplications(req, res) {
+		try {
+			const applications = await applicationModel.find().lean()
+
+			if (!applications) {
+				return res.status(404).json({ message: 'Applications not found' })
+			}
+
+			return res.status(200).json(applications)
+		} catch (error) {
+			console.log(error)
+			return res.status(500).json({ message: 'Error getting application' })
+		}
+	}
+
+	async getApplication(req, res) {
+		try {
+			const applicationId = req.params.id
+
+			const application = await applicationModel.findById(applicationId)
+
+			if (!application) {
+				return res.status(404).json({ message: 'Application not found' })
+			}
+
+			return res.status(200).json(application)
+		} catch (error) {
+			console.log(error)
+			return res.status(500).json({ message: 'Error getting application' })
 		}
 	}
 }

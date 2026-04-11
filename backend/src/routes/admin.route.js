@@ -3,8 +3,9 @@ const adminController = require('../controllers/admin.controller')
 const router = require('express').Router()
 
 router.get('/get-cottages', adminController.getAllCottages)
-
 router.get('/get-cottage/:id', adminController.getCottage)
+router.get('/get-applications', adminController.getApplications)
+router.get('/get-application/:id', adminController.getApplication)
 
 router.post('/add-cottage', adminController.addCottage)
 

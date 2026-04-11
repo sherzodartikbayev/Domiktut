@@ -13,4 +13,7 @@ export const applicationSelectionFormSchema = z.object({
 	numberOfPeople: z.number({ invalid_type_error: "Введите количество человек" }).min(1, "Минимум 1 человек"),
 	criteriaOfCottage: z.string().min(3, "Минимум 3"),
 	budget: z.number({ invalid_type_error: "Укажите бюджет числом" }).min(1000, "Бюджет должен быть больше 0"),
+}).refine((data) => data.to > data.from, {
+	message: "Дата выезда должна быть позже даты заезда",
+	path: ["to"],
 })

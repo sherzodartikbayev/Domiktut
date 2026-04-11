@@ -8,6 +8,7 @@ router.get('/profile/:id', userController.getProfile)
 router.get('/favorites/:id', userController.getFavorites)
 
 router.post('/add-favorite', userController.addFavorite)
+router.post('/send-application', userController.sendApplication)
 
 router.put('/update-profile/:id', userController.editProfile)
 

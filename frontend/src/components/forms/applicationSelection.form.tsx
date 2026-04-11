@@ -22,7 +22,11 @@ export function ApplicationSelectionForm() {
 	})
 
 	function onSubmit(data: z.infer<typeof applicationSelectionFormSchema>) {
-		console.log(data)
+		console.log({
+			...data,
+			from: data.from.toISOString(),
+			to: data.to.toISOString(),
+		})
 	}
 
 	return (
@@ -155,6 +159,7 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
+
 				{/* Criteria Of Cottage */}
 				<Controller
 					name='criteriaOfCottage'
@@ -173,6 +178,7 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
+
 				{/* Budget */}
 				<Controller
 					name='budget'
@@ -193,6 +199,7 @@ export function ApplicationSelectionForm() {
 						</Field>
 					)}
 				/>
+
 				<Button
 					type='submit'
 					className='bg-[#F4683F] text-white rounded-2xl py-6 font-semibold text-[18px]'
